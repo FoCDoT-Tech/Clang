@@ -1,6 +1,7 @@
 # C Language Comprehensive Index
 
 ## Table of Contents
+
 1. [Fundamentals](#1-fundamentals)
 2. [Basic Syntax & Structure](#2-basic-syntax--structure)
 3. [Data Types & Variables](#3-data-types--variables)
@@ -19,24 +20,28 @@
 16. [Best Practices](#16-best-practices)
 17. [Recommended Learning Path](#17-recommended-learning-path)
 18. [Project Ideas by Difficulty](#18-project-ideas-by-difficulty)
+19. [Alphabetical C Language Reference](#19-alphabetical-c-language-reference)
 
 ---
 
 ## 1. Fundamentals
 
 ### 1.1 Introduction to C
+
 - History and evolution of C
 - Why learn C?
 - C vs other programming languages
 - Applications of C
 
 ### 1.2 Development Environment
+
 - Setting up compiler (GCC, Clang, MSVC)
 - IDEs and text editors
 - Command line compilation
 - Makefiles basics
 
 ### 1.3 First Program
+
 - Hello World program
 - Program structure
 - Compilation process
@@ -47,18 +52,21 @@
 ## 2. Basic Syntax & Structure
 
 ### 2.1 Program Structure
+
 - `#include` directives
 - `main()` function
 - Function declarations and definitions
 - Comments (single-line `//`, multi-line `/* */`)
 
 ### 2.2 Identifiers & Keywords
+
 - Naming conventions
 - Reserved keywords
 - Case sensitivity
 - Valid identifier rules
 
 ### 2.3 Tokens
+
 - Keywords
 - Identifiers
 - Constants
@@ -71,6 +79,7 @@
 ## 3. Data Types & Variables
 
 ### 3.1 Basic Data Types
+
 - `char` (character)
 - `int` (integer)
 - `float` (single precision)
@@ -78,12 +87,14 @@
 - `void`
 
 ### 3.2 Type Modifiers
+
 - `signed` / `unsigned`
 - `short` / `long`
 - `long long`
 - Size variations across platforms
 
 ### 3.3 Variable Declaration & Initialization
+
 - Declaration syntax
 - Initialization
 - Multiple declarations
@@ -91,12 +102,14 @@
 - Storage classes (`auto`, `register`, `static`, `extern`)
 
 ### 3.4 Constants
+
 - Literal constants
 - `const` keyword
 - `#define` preprocessor
 - `enum` enumeration
 
 ### 3.5 Type Conversion
+
 - Implicit conversion
 - Explicit casting
 - Type promotion rules
@@ -106,20 +119,24 @@
 ## 4. Operators
 
 ### 4.1 Arithmetic Operators
+
 - `+`, `-`, `*`, `/`, `%`
 - Unary operators (`+`, `-`)
 - Increment/Decrement (`++`, `--`)
 
 ### 4.2 Relational Operators
+
 - `<`, `>`, `<=`, `>=`
 - `==`, `!=`
 
 ### 4.3 Logical Operators
+
 - `&&` (AND)
 - `||` (OR)
 - `!` (NOT)
 
 ### 4.4 Bitwise Operators
+
 - `&` (AND)
 - `|` (OR)
 - `^` (XOR)
@@ -128,11 +145,13 @@
 - `>>` (right shift)
 
 ### 4.5 Assignment Operators
+
 - `=`
 - Compound assignment (`+=`, `-=`, `*=`, `/=`, `%=`)
 - Bitwise compound assignment
 
 ### 4.6 Other Operators
+
 - Conditional operator (`? :`)
 - `sizeof` operator
 - Address operator (`&`)
@@ -146,6 +165,7 @@
 ## 5. Control Flow
 
 ### 5.1 Conditional Statements
+
 - `if` statement
 - `if-else` statement
 - `else if` ladder
@@ -153,12 +173,14 @@
 - `switch-case` statement
 
 ### 5.2 Loops
+
 - `for` loop
 - `while` loop
 - `do-while` loop
 - Nested loops
 
 ### 5.3 Jump Statements
+
 - `break`
 - `continue`
 - `goto`
@@ -169,29 +191,34 @@
 ## 6. Functions
 
 ### 6.1 Function Basics
+
 - Function definition
 - Function declaration (prototype)
 - Function call
 - Return statement
 
 ### 6.2 Parameters & Arguments
+
 - Formal parameters
 - Actual arguments
 - Pass by value
 - Pass by reference (using pointers)
 
 ### 6.3 Function Types
+
 - `void` functions
 - Functions returning values
 - Functions with no parameters
 
 ### 6.4 Advanced Function Concepts
+
 - Recursive functions
 - Function pointers
 - Callback functions
 - Variable arguments (`stdarg.h`)
 
 ### 6.5 Scope & Storage Classes
+
 - Local variables
 - Global variables
 - Static variables
@@ -202,6 +229,7 @@
 ## 7. Arrays & Strings
 
 ### 7.1 Arrays
+
 - One-dimensional arrays
 - Array declaration and initialization
 - Array indexing
@@ -209,18 +237,21 @@
 - Passing arrays to functions
 
 ### 7.2 Multi-dimensional Arrays
+
 - Two-dimensional arrays
 - Multi-dimensional arrays
 - Memory layout
 - Initialization techniques
 
 ### 7.3 Strings
+
 - String representation
 - String literals
 - Character arrays vs strings
 - Null terminator
 
 ### 7.4 String Functions
+
 - `strlen()`, `strcpy()`, `strcat()`
 - `strcmp()`, `strstr()`, `strchr()`
 - `sprintf()`, `sscanf()`
@@ -231,6 +262,7 @@
 ## 8. Pointers
 
 ### 8.1 Pointer Basics
+
 - What are pointers?
 - Pointer declaration
 - Address operator (`&`)
@@ -238,22 +270,26 @@
 - Null pointers
 
 ### 8.2 Pointer Arithmetic
+
 - Increment/Decrement
 - Addition/Subtraction
 - Pointer comparison
 - Pointer difference
 
 ### 8.3 Pointers and Arrays
+
 - Array name as pointer
 - Pointer indexing
 - Pointer vs array notation
 
 ### 8.4 Pointers and Functions
+
 - Passing pointers to functions
 - Returning pointers from functions
 - Function pointers
 
 ### 8.5 Advanced Pointer Concepts
+
 - Pointer to pointer
 - Array of pointers
 - Pointer to array
@@ -264,18 +300,21 @@
 ## 9. Memory Management
 
 ### 9.1 Memory Layout
+
 - Stack vs Heap
 - Code segment
 - Data segment
 - BSS segment
 
 ### 9.2 Dynamic Memory Allocation
+
 - `malloc()`
 - `calloc()`
 - `realloc()`
 - `free()`
 
 ### 9.3 Memory Leaks & Debugging
+
 - Common memory errors
 - Valgrind and memory debugging tools
 - Best practices for memory management
@@ -285,6 +324,7 @@
 ## 10. Structures & Unions
 
 ### 10.1 Structures
+
 - Structure declaration
 - Structure initialization
 - Accessing structure members
@@ -292,21 +332,25 @@
 - Array of structures
 
 ### 10.2 Pointers and Structures
+
 - Pointer to structure
 - Arrow operator (`->`)
 - Dynamic allocation of structures
 
 ### 10.3 Unions
+
 - Union declaration
 - Union vs structure
 - Memory sharing in unions
 
 ### 10.4 Bit Fields
+
 - Bit field declaration
 - Memory optimization
 - Practical applications
 
 ### 10.5 `typedef`
+
 - Creating type aliases
 - Simplifying complex declarations
 - Best practices
@@ -316,22 +360,26 @@
 ## 11. File Handling
 
 ### 11.1 File Operations
+
 - Opening files (`fopen()`)
 - Closing files (`fclose()`)
 - File modes
 - Error handling
 
 ### 11.2 File I/O Functions
+
 - Character I/O (`fgetc()`, `fputc()`)
 - String I/O (`fgets()`, `fputs()`)
 - Formatted I/O (`fprintf()`, `fscanf()`)
 - Binary I/O (`fread()`, `fwrite()`)
 
 ### 11.3 File Positioning
+
 - `fseek()`, `ftell()`, `rewind()`
 - `feof()`, `ferror()`
 
 ### 11.4 Command Line Arguments
+
 - `argc` and `argv`
 - Processing command line arguments
 
@@ -340,6 +388,7 @@
 ## 12. Preprocessor
 
 ### 12.1 Preprocessor Directives
+
 - `#include`
 - `#define`
 - `#undef`
@@ -347,6 +396,7 @@
 - `#if`, `#elif`, `#else`
 
 ### 12.2 Macros
+
 - Object-like macros
 - Function-like macros
 - Macro parameters
@@ -354,11 +404,13 @@
 - Token pasting (`##`)
 
 ### 12.3 Conditional Compilation
+
 - Platform-specific code
 - Debug vs release builds
 - Feature toggles
 
 ### 12.4 Predefined Macros
+
 - `__FILE__`, `__LINE__`
 - `__DATE__`, `__TIME__`
 - `__STDC__`
@@ -368,31 +420,37 @@
 ## 13. Advanced Topics
 
 ### 13.1 Complex Data Structures
+
 - Linked lists
 - Stacks and queues
 - Trees and graphs
 - Hash tables
 
 ### 13.2 Advanced Pointer Techniques
+
 - Function pointers and callbacks
 - Pointer arrays and array pointers
 - Multi-level pointers
 
 ### 13.3 Bit Manipulation
+
 - Bit operations
 - Bit masks
 - Practical applications
 
 ### 13.4 Variable Arguments
+
 - `stdarg.h` library
 - `va_list`, `va_start`, `va_arg`, `va_end`
 
 ### 13.5 Signal Handling
+
 - `signal.h`
 - Signal types
 - Signal handlers
 
 ### 13.6 Multi-file Programs
+
 - Header files
 - Separate compilation
 - Linking object files
@@ -403,29 +461,35 @@
 ## 14. Standard Library
 
 ### 14.1 Standard I/O (`stdio.h`)
+
 - Input/output functions
 - File operations
 - Formatted I/O
 
 ### 14.2 String Handling (`string.h`)
+
 - String manipulation functions
 - Memory functions (`memcpy`, `memset`)
 
 ### 14.3 Math Library (`math.h`)
+
 - Mathematical functions
 - Trigonometric functions
 - Logarithmic functions
 
 ### 14.4 Memory Management (`stdlib.h`)
+
 - Dynamic memory allocation
 - Random number generation
 - Conversion functions
 
 ### 14.5 Character Classification (`ctype.h`)
+
 - Character testing functions
 - Character conversion functions
 
 ### 14.6 Time Functions (`time.h`)
+
 - Time manipulation
 - Date formatting
 
@@ -434,17 +498,20 @@
 ## 15. Debugging & Tools
 
 ### 15.1 Debugging Techniques
+
 - `printf()` debugging
 - Using debuggers (GDB)
 - Static analysis tools
 
 ### 15.2 Common Errors
+
 - Syntax errors
 - Runtime errors
 - Logic errors
 - Memory errors
 
 ### 15.3 Development Tools
+
 - Compilers (GCC, Clang)
 - Make and build systems
 - Version control (Git)
@@ -455,21 +522,25 @@
 ## 16. Best Practices
 
 ### 16.1 Code Style
+
 - Naming conventions
 - Indentation and formatting
 - Comments and documentation
 
 ### 16.2 Error Handling
+
 - Return codes
 - Error checking
 - Defensive programming
 
 ### 16.3 Performance Considerations
+
 - Algorithm efficiency
 - Memory usage
 - Compiler optimizations
 
 ### 16.4 Portability
+
 - Platform-independent code
 - Standard compliance
 - Avoiding undefined behavior
@@ -479,6 +550,7 @@
 ## 17. Recommended Learning Path
 
 ### Phase 1: Foundation (Weeks 1-2)
+
 1. Development environment setup
 2. Basic syntax and program structure
 3. Data types and variables
@@ -486,6 +558,7 @@
 5. Simple input/output
 
 ### Phase 2: Control & Functions (Weeks 3-4)
+
 1. Control flow statements
 2. Loops and iterations
 3. Function basics
@@ -493,24 +566,28 @@
 5. Scope and storage classes
 
 ### Phase 3: Data Structures (Weeks 5-6)
+
 1. Arrays and strings
 2. Multi-dimensional arrays
 3. String manipulation
 4. Basic algorithms
 
 ### Phase 4: Pointers & Memory (Weeks 7-8)
+
 1. Pointer fundamentals
 2. Pointer arithmetic
 3. Pointers with arrays and functions
 4. Dynamic memory allocation
 
 ### Phase 5: Advanced Concepts (Weeks 9-10)
+
 1. Structures and unions
 2. File handling
 3. Preprocessor directives
 4. Multi-file programs
 
 ### Phase 6: Mastery (Weeks 11-12)
+
 1. Advanced pointers
 2. Data structures implementation
 3. Debugging and optimization
@@ -521,6 +598,7 @@
 ## 18. Project Ideas by Difficulty
 
 ### Beginner Level
+
 - **Calculator**: Basic arithmetic operations
 - **Temperature Converter**: Celsius/Fahrenheit conversion
 - **Number Guessing Game**: Random number generation
@@ -528,6 +606,7 @@
 - **Student Grade Manager**: Array-based grade storage
 
 ### Intermediate Level
+
 - **Text File Analyzer**: Word count, character frequency
 - **Contact Management System**: Using structures and files
 - **Simple Inventory System**: CRUD operations
@@ -535,6 +614,7 @@
 - **Basic Encryption/Decryption**: Caesar cipher implementation
 
 ### Advanced Level
+
 - **Memory Allocator**: Custom malloc/free implementation
 - **Data Structure Library**: Linked lists, stacks, queues
 - **File Compression Tool**: Basic compression algorithms
@@ -542,6 +622,7 @@
 - **Network Programming**: Socket-based client-server
 
 ### Expert Level
+
 - **Operating System Components**: Process scheduler simulation
 - **Compiler Frontend**: Lexical analyzer and parser
 - **Game Engine**: 2D graphics and physics
@@ -551,6 +632,7 @@
 ---
 
 ## Notes for Learning
+
 - Practice coding daily
 - Start with simple programs and gradually increase complexity
 - Focus on understanding concepts rather than memorizing syntax
@@ -565,16 +647,16 @@
 
 ### Keywords and Operators
 
-- **_Alignas**: Keyword (C11) - Alignment specifier.
-- **_Alignof**: Keyword (C11) - Query alignment.
-- **_Atomic**: Keyword (C11) - Atomic type qualifier.
-- **_Bool**: Data type (C99) - Boolean type.
-- **_Complex**: Data type (C99) - Complex numbers.
-- **_Generic**: Keyword (C11) - Generic selection.
-- **_Imaginary**: Data type (C99) - Imaginary numbers.
-- **_Noreturn**: Keyword (C11) - Function does not return.
-- **_Static_assert**: Keyword (C11) - Compile-time assertion.
-- **_Thread_local**: Keyword (C11) - Thread-local storage.
+- **\_Alignas**: Keyword (C11) - Alignment specifier.
+- **\_Alignof**: Keyword (C11) - Query alignment.
+- **\_Atomic**: Keyword (C11) - Atomic type qualifier.
+- **\_Bool**: Data type (C99) - Boolean type.
+- **\_Complex**: Data type (C99) - Complex numbers.
+- **\_Generic**: Keyword (C11) - Generic selection.
+- **\_Imaginary**: Data type (C99) - Imaginary numbers.
+- **\_Noreturn**: Keyword (C11) - Function does not return.
+- **\_Static_assert**: Keyword (C11) - Compile-time assertion.
+- **\_Thread_local**: Keyword (C11) - Thread-local storage.
 - **&&**: Operator - Logical AND.
 - **&**: Operator - Bitwise AND; address-of.
 - **&=**: Operator - Bitwise AND assignment.
@@ -583,8 +665,8 @@
 - **%**: Operator - Modulo.
 - **%=**: Operator - Modulo assignment.
 - **()**: Operator - Function call; grouping.
-- *****: Operator - Multiplication; dereference.
-- ****=**: Operator - Multiplication assignment.
+- **\***: Operator - Multiplication; dereference.
+- \***\*=**: Operator - Multiplication assignment.
 - **+**: Operator - Addition; unary plus.
 - **++**: Operator - Increment (prefix/postfix).
 - **+=**: Operator - Addition assignment.
@@ -667,9 +749,11 @@
 ### Standard Library Functions
 
 #### <assert.h>
+
 - **assert()**: Macro - Runtime assertion.
 
 #### <ctype.h>
+
 - **isalnum()**: Function - Alphanumeric check.
 - **isalpha()**: Function - Alphabetic check.
 - **iscntrl()**: Function - Control char check.
@@ -685,9 +769,11 @@
 - **toupper()**: Function - To uppercase.
 
 #### <errno.h>
+
 - **errno**: Macro - Error number.
 
 #### <float.h>
+
 - **DBL_DIG**: Macro - Double digits.
 - **DBL_MAX**: Macro - Max double.
 - **DBL_MIN**: Macro - Min double.
@@ -699,6 +785,7 @@
 - **LDBL_MIN**: Macro - Min long double.
 
 #### <limits.h>
+
 - **CHAR_BIT**: Macro - Bits in char.
 - **CHAR_MAX**: Macro - Max char value.
 - **CHAR_MIN**: Macro - Min char value.
@@ -716,10 +803,12 @@
 - **USHRT_MAX**: Macro - Max unsigned short.
 
 #### <locale.h>
+
 - **localeconv()**: Function - Locale info.
 - **setlocale()**: Function - Set locale.
 
 #### <math.h>
+
 - **acos()**: Function - Arc cosine.
 - **asin()**: Function - Arc sine.
 - **atan()**: Function - Arc tangent.
@@ -744,11 +833,13 @@
 - **tanh()**: Function - Hyperbolic tangent.
 
 #### <setjmp.h>
+
 - **longjmp()**: Function - Non-local jump.
 - **setjmp()**: Function - Set jump.
 - **setjmp**: Type - Jump buffer.
 
 #### <signal.h>
+
 - **raise()**: Function - Raise signal.
 - **signal()**: Function - Set signal handler.
 - **sig_atomic_t**: Type - Signal atomic.
@@ -763,12 +854,14 @@
 - **SIGTERM**: Macro - Termination.
 
 #### <stdarg.h>
+
 - **va_arg()**: Macro - Variable arg.
 - **va_end()**: Macro - End variable args.
 - **va_list**: Type - Variable arg list.
 - **va_start()**: Macro - Start variable args.
 
 #### <stddef.h>
+
 - **NULL**: Macro - Null pointer.
 - **offsetof()**: Macro - Structure offset.
 - **ptrdiff_t**: Type - Pointer difference.
@@ -776,6 +869,7 @@
 - **wchar_t**: Type - Wide char.
 
 #### <stdio.h>
+
 - **BUFSIZ**: Macro - Buffer size.
 - **clearerr()**: Function - Clear error.
 - **fclose()**: Function - Close file.
@@ -827,6 +921,7 @@
 - **vsprintf()**: Function - Variable formatted string print.
 
 #### <stdlib.h>
+
 - **abort()**: Function - Abnormal termination.
 - **abs()**: Function - Absolute value (int).
 - **atexit()**: Function - Register exit handler.
@@ -862,6 +957,7 @@
 - **wctomb()**: Function - Wide to multibyte char.
 
 #### <string.h>
+
 - **memchr()**: Function - Memory char search.
 - **memcmp()**: Function - Memory compare.
 - **memcpy()**: Function - Memory copy.
@@ -885,6 +981,7 @@
 - **strtok()**: Function - String token.
 
 #### <time.h>
+
 - **asctime()**: Function - Convert time to string.
 - **clock()**: Function - Processor time.
 - **CLOCKS_PER_SEC**: Macro - Clock ticks per second.
@@ -945,4 +1042,4 @@
 
 ---
 
-*This comprehensive index serves as both a learning roadmap and complete reference for your C language journey. The alphabetical reference section provides quick lookup for all C language elements, while the structured learning path ensures systematic progression from fundamentals to mastery.*
+_This comprehensive index serves as both a learning roadmap and complete reference for your C language journey. The alphabetical reference section provides quick lookup for all C language elements, while the structured learning path ensures systematic progression from fundamentals to mastery._
