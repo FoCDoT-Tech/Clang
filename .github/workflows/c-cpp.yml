@@ -114,6 +114,14 @@ jobs:
         cd "../11.3_File_Positioning" && make all && make clean
         cd "../11.4_Command_Line_Arguments" && make all && make clean
     
+    - name: Build Chapter 12 - Preprocessor
+      run: |
+        echo "🔨 Building Chapter 12 - Preprocessor"
+        cd "12_Preprocessor/12.1_Preprocessor_Directives" && make all && make clean
+        cd "../12.2_Macros" && make all && make clean
+        cd "../12.3_Conditional_Compilation" && make all && make clean
+        cd "../12.4_Predefined_Macros" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -142,7 +150,8 @@ jobs:
         echo "  • Chapter 09: Memory Management (3 sections)"
         echo "  • Chapter 10: Structures & Unions (5 sections)"
         echo "  • Chapter 11: File Handling (4 sections)"
+        echo "  • Chapter 12: Preprocessor (4 sections)"
         echo ""
-        echo "🔧 Total examples: 45 working C programs"
+        echo "🔧 Total examples: 49 working C programs"
         echo "🛠️  All examples compile with: gcc -Wall -Wextra -std=c99 -pedantic"
         echo "✅ All tests passed successfully!"
