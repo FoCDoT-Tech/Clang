@@ -17,12 +17,13 @@ jobs:
     - name: Install build dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y gcc make
+        sudo apt-get install -y gcc make valgrind
     
     - name: Show compiler information
       run: |
         gcc --version
         make --version
+        valgrind --version
     
     - name: Build Chapter 01 - Fundamentals
       run: |
@@ -96,11 +97,20 @@ jobs:
         cd "../9.2_Dynamic_Memory_Allocation" && make all && make clean
         cd "../9.3_Memory_Leaks_Debugging" && make all && make clean
     
+    - name: Build Chapter 10 - Structures & Unions
+      run: |
+        echo "🔨 Building Chapter 10 - Structures & Unions"
+        cd "10_Structures_Unions/10.1_Structures" && make all && make clean
+        cd "../10.2_Pointers_and_Structures" && make all && make clean
+        cd "../10.3_Unions" && make all && make clean
+        cd "../10.4_Bit_Fields" && make all && make clean
+        cd "../10.5_typedef" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
-        # Find all Makefiles and test compilation
-        find . -name "Makefile" -type f | while read makefile; do
+        # Find all Makefiles and test compilation (excluding master chapter Makefiles)
+        find . -name "Makefile" -type f | grep -v "^\.\/[0-9][0-9]_.*\/Makefile$" | while read makefile; do
           dir=$(dirname "$makefile")
           echo "Testing compilation in: $dir"
           cd "$dir"
