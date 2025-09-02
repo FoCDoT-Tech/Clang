@@ -91,11 +91,48 @@ clean:
 .PHONY: clean
 ```
 
-## Code Example
+## Code Examples
 
+### Environment Verification
 The [`setup_check.c`](setup_check.c) program verifies your C development environment is properly configured.
 
 **Run the code:**
 ```bash
 make run
 ```
+
+### Library Documentation Explorer
+The [`stdlib_explorer.c`](stdlib_explorer.c) demonstrates how to explore and document C standard library functions using `stdlib.h` as an example.
+
+**Features:**
+- Shows how to find library documentation (`man` pages, header files, online resources)
+- Demonstrates all major `stdlib.h` function categories
+- Working examples of memory management, string conversion, utilities
+- Interactive exploration of library functions with practical code
+
+**Run the code:**
+```bash
+make run-explorer
+```
+
+**What you'll learn:**
+- Memory management: `malloc()`, `calloc()`, `realloc()`, `free()`
+- String conversion: `atoi()`, `atof()`, `strtol()` with different bases
+- Utility functions: `abs()`, `rand()`, `getenv()`
+- How to explore any C library systematically
+
+## How to Explore C Libraries
+
+### Documentation Methods
+1. **Manual pages**: `man 3 malloc`, `man 3 printf`
+2. **Header files**: `/usr/include/stdlib.h` (Unix/Linux systems)
+3. **Online references**: [cppreference.com](https://en.cppreference.com/w/c/header/stdlib), GNU documentation
+4. **IDE help**: Most modern IDEs show function signatures on hover
+
+### Library Categories in stdlib.h
+- **Memory Management**: Dynamic allocation and deallocation
+- **String Conversion**: Convert strings to numbers with error handling
+- **Random Numbers**: Pseudo-random number generation
+- **Process Control**: Program termination and cleanup
+- **Environment**: Access system environment variables
+- **Searching/Sorting**: Built-in algorithms for data manipulation
