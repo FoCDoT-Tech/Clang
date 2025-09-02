@@ -122,4 +122,5 @@ jobs:
         echo "   - Chapter 07: Arrays & Strings (4 sections)"
         echo "   - Chapter 08: Pointers (5 sections)"
         echo "   - Chapter 09: Memory Management (3 sections)"
-        echo "   - Total: 36 working code examples"
+        echo "   - Chapter 10: Structures & Unions (5 sections)"
+        echo "   - Total: 41 working code examples"
