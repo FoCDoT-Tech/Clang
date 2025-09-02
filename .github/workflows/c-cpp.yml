@@ -89,6 +89,13 @@ jobs:
         cd "../8.4_Pointers_and_Functions" && make all && make clean
         cd "../8.5_Advanced_Pointer_Concepts" && make all && make clean
     
+    - name: Build Chapter 09 - Memory Management
+      run: |
+        echo "🔨 Building Chapter 09 - Memory Management"
+        cd "09_Memory_Management/9.1_Memory_Layout" && make all && make clean
+        cd "../9.2_Dynamic_Memory_Allocation" && make all && make clean
+        cd "../9.3_Memory_Leaks_Debugging" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -114,4 +121,5 @@ jobs:
         echo "   - Chapter 06: Functions (4 sections)"
         echo "   - Chapter 07: Arrays & Strings (4 sections)"
         echo "   - Chapter 08: Pointers (5 sections)"
-        echo "   - Total: 33 working code examples"
+        echo "   - Chapter 09: Memory Management (3 sections)"
+        echo "   - Total: 36 working code examples"
