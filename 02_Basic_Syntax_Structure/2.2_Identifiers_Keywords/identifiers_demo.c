@@ -34,7 +34,7 @@ void demonstrate_valid_identifiers(void) {
     int age = 25;                    // Simple name
     int student_count = 50;          // snake_case with underscore
     int maxValue = 100;              // camelCase
-    int _private_var = 42;           // Starting with underscore
+    int _private_var = 42;           // Starting with underscore (convention for private variables) cannot be used outside the scope of the function
     int num2 = 2;                    // Contains digit (not at start)
     char first_letter = 'A';         // Descriptive name
     

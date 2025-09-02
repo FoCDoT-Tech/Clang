@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: C Language Learning - Build All Chapters
 
 on:
   push:
@@ -7,17 +7,63 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Install build dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gcc make
+    
+    - name: Show compiler information
+      run: |
+        gcc --version
+        make --version
+    
+    - name: Build Chapter 01 - Fundamentals
+      run: |
+        echo "🔨 Building Chapter 01 - Fundamentals"
+        cd "01_Fundamentals/1.2_Development_Environment" && make all && make clean
+        cd "../1.3_First_Program" && make all && make clean
+    
+    - name: Build Chapter 02 - Basic Syntax Structure
+      run: |
+        echo "🔨 Building Chapter 02 - Basic Syntax Structure"
+        cd "02_Basic_Syntax_Structure/2.1_Program_Structure" && make all && make clean
+        cd "../2.2_Identifiers_Keywords" && make all && make clean
+        cd "../2.3_Tokens" && make all && make clean
+    
+    - name: Build Chapter 03 - Data Types Variables
+      run: |
+        echo "🔨 Building Chapter 03 - Data Types Variables"
+        cd "03_Data_Types_Variables/3.1_Basic_Data_Types" && make all && make clean
+        cd "../3.2_Type_Modifiers" && make all && make clean
+        cd "../3.3_Variable_Declaration_Initialization" && make all && make clean
+        cd "../3.4_Constants" && make all && make clean
+        cd "../3.5_Type_Conversion" && make all && make clean
+    
+    - name: Run comprehensive test
+      run: |
+        echo "🧪 Running comprehensive test of all examples"
+        # Find all Makefiles and test compilation
+        find . -name "Makefile" -type f | while read makefile; do
+          dir=$(dirname "$makefile")
+          echo "Testing compilation in: $dir"
+          cd "$dir"
+          make all
+          make clean
+          cd - > /dev/null
+        done
+    
+    - name: Build summary
+      run: |
+        echo "✅ All C language learning examples compiled successfully!"
+        echo "📊 Build Summary:"
+        echo "   - Chapter 01: Fundamentals (2 sections)"
+        echo "   - Chapter 02: Basic Syntax Structure (3 sections)"
+        echo "   - Chapter 03: Data Types Variables (5 sections)"
+        echo "   - Total: 10 working code examples"

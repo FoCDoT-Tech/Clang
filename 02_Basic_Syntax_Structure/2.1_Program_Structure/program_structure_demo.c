@@ -64,8 +64,36 @@ void demonstrate_includes(void) {
     char str2[] = " World";
     strcat(str1, str2);
     printf("- string.h: strcat() result: %s\n", str1);
-    printf("- string.h: strlen() length: %zu\n\n", strlen(str1));
+    printf("- string.h: strlen() length: %zu\n\n", strlen(str1)); 
+    
+    /* FORMAT SPECIFIER EXPLANATION: %zu vs %d
+     * 
+     * strlen() returns size_t, not int - here's why this matters:
+     * 
+     * 1. TYPE SAFETY:
+     *    - size_t: unsigned integer type (can't be negative)
+     *    - int: signed integer type (can be negative)
+     *    - String length is always ≥ 0, so unsigned makes sense
+     * 
+     * 2. SIZE CONSIDERATIONS:
+     *    - size_t: typically 8 bytes on 64-bit systems (can hold very large values)
+     *    - int: typically 4 bytes (limited to ~2 billion)
+     *    - Large strings need size_t's bigger range
+     * 
+     * 3. FORMAT SPECIFIER MATCHING:
+     *    - %zu: correct format for size_t (z = size_t modifier, u = unsigned)
+     *    - %d: format for signed int - WRONG for size_t!
+     *    - Using %d with size_t causes undefined behavior/warnings
+     * 
+     * 4. PLATFORM PORTABILITY:
+     *    - size_t size varies by platform (32-bit vs 64-bit)
+     *    - %zu adapts automatically to the platform's size_t
+     *    - %d would truncate on some platforms
+     * 
+     * MEMORY: Always match format specifiers to data types for safety!
+     */ 
 }
+
 
 // Single-line comment function
 void demonstrate_comments(void) {
