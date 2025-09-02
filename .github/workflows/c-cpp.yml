@@ -106,6 +106,14 @@ jobs:
         cd "../10.4_Bit_Fields" && make all && make clean
         cd "../10.5_typedef" && make all && make clean
     
+    - name: Build Chapter 11 - File Handling
+      run: |
+        echo "🔨 Building Chapter 11 - File Handling"
+        cd "11_File_Handling/11.1_File_Operations" && make all && make clean
+        cd "../11.2_File_IO_Functions" && make all && make clean
+        cd "../11.3_File_Positioning" && make all && make clean
+        cd "../11.4_Command_Line_Arguments" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -121,16 +129,20 @@ jobs:
     
     - name: Build summary
       run: |
-        echo "✅ All C language learning examples compiled successfully!"
-        echo "📊 Build Summary:"
-        echo "   - Chapter 01: Fundamentals (2 sections)"
-        echo "   - Chapter 02: Basic Syntax Structure (3 sections)"
-        echo "   - Chapter 03: Data Types Variables (5 sections)"
-        echo "   - Chapter 04: Operators (7 sections)"
-        echo "   - Chapter 05: Control Flow (3 sections)"
-        echo "   - Chapter 06: Functions (4 sections)"
-        echo "   - Chapter 07: Arrays & Strings (4 sections)"
-        echo "   - Chapter 08: Pointers (5 sections)"
-        echo "   - Chapter 09: Memory Management (3 sections)"
-        echo "   - Chapter 10: Structures & Unions (5 sections)"
-        echo "   - Total: 41 working code examples"
+        echo "✅ Build Summary:"
+        echo "📁 Chapters built and tested:"
+        echo "  • Chapter 01: Fundamentals (3 sections)"
+        echo "  • Chapter 02: Basic Syntax & Structure (3 sections)"
+        echo "  • Chapter 03: Data Types & Variables (4 sections)"
+        echo "  • Chapter 04: Operators (7 sections)"
+        echo "  • Chapter 05: Control Flow (3 sections)"
+        echo "  • Chapter 06: Functions (4 sections)"
+        echo "  • Chapter 07: Arrays & Strings (4 sections)"
+        echo "  • Chapter 08: Pointers (5 sections)"
+        echo "  • Chapter 09: Memory Management (3 sections)"
+        echo "  • Chapter 10: Structures & Unions (5 sections)"
+        echo "  • Chapter 11: File Handling (4 sections)"
+        echo ""
+        echo "🔧 Total examples: 45 working C programs"
+        echo "🛠️  All examples compile with: gcc -Wall -Wextra -std=c99 -pedantic"
+        echo "✅ All tests passed successfully!"
