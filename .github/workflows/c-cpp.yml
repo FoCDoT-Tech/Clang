@@ -80,6 +80,15 @@ jobs:
         cd "../7.3_Strings" && make all && make clean
         cd "../7.4_String_Functions" && make all && make clean
     
+    - name: Build Chapter 08 - Pointers
+      run: |
+        echo "🔨 Building Chapter 08 - Pointers"
+        cd "08_Pointers/8.1_Pointer_Basics" && make all && make clean
+        cd "../8.2_Pointer_Arithmetic" && make all && make clean
+        cd "../8.3_Pointers_and_Arrays" && make all && make clean
+        cd "../8.4_Pointers_and_Functions" && make all && make clean
+        cd "../8.5_Advanced_Pointer_Concepts" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -104,4 +113,5 @@ jobs:
         echo "   - Chapter 05: Control Flow (3 sections)"
         echo "   - Chapter 06: Functions (4 sections)"
         echo "   - Chapter 07: Arrays & Strings (4 sections)"
-        echo "   - Total: 28 working code examples"
+        echo "   - Chapter 08: Pointers (5 sections)"
+        echo "   - Total: 33 working code examples"
