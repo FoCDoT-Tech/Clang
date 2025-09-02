@@ -46,6 +46,17 @@ jobs:
         cd "../3.4_Constants" && make all && make clean
         cd "../3.5_Type_Conversion" && make all && make clean
     
+    - name: Build Chapter 04 - Operators
+      run: |
+        echo "🔨 Building Chapter 04 - Operators"
+        cd "04_Operators/4.1_Arithmetic_Operators" && make all && make clean
+        cd "../4.2_Relational_Operators" && make all && make clean
+        cd "../4.3_Logical_Operators" && make all && make clean
+        cd "../4.4_Bitwise_Operators" && make all && make clean
+        cd "../4.5_Assignment_Operators" && make all && make clean
+        cd "../4.6_Other_Operators" && make all && make clean
+        cd "../4.7_Operator_Precedence_Associativity" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -66,4 +77,5 @@ jobs:
         echo "   - Chapter 01: Fundamentals (2 sections)"
         echo "   - Chapter 02: Basic Syntax Structure (3 sections)"
         echo "   - Chapter 03: Data Types Variables (5 sections)"
-        echo "   - Total: 10 working code examples"
+        echo "   - Chapter 04: Operators (7 sections)"
+        echo "   - Total: 17 working code examples"
