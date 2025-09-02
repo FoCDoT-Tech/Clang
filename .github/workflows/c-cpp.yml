@@ -64,6 +64,22 @@ jobs:
         cd "../5.2_Loops" && make all && make clean
         cd "../5.3_Jump_Statements" && make all && make clean
     
+    - name: Build Chapter 06 - Functions
+      run: |
+        echo "🔨 Building Chapter 06 - Functions"
+        cd "06_Functions/6.1_Function_Basics" && make all && make clean
+        cd "../6.2_Parameters_Arguments" && make all && make clean
+        cd "../6.3_Function_Types" && make all && make clean
+        cd "../6.4_Advanced_Function_Concepts" && make all && make clean
+    
+    - name: Build Chapter 07 - Arrays Strings
+      run: |
+        echo "🔨 Building Chapter 07 - Arrays Strings"
+        cd "07_Arrays_Strings/7.1_Arrays" && make all && make clean
+        cd "../7.2_Multi_dimensional_Arrays" && make all && make clean
+        cd "../7.3_Strings" && make all && make clean
+        cd "../7.4_String_Functions" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -86,4 +102,6 @@ jobs:
         echo "   - Chapter 03: Data Types Variables (5 sections)"
         echo "   - Chapter 04: Operators (7 sections)"
         echo "   - Chapter 05: Control Flow (3 sections)"
-        echo "   - Total: 20 working code examples"
+        echo "   - Chapter 06: Functions (4 sections)"
+        echo "   - Chapter 07: Arrays & Strings (4 sections)"
+        echo "   - Total: 28 working code examples"
