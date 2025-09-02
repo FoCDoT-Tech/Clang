@@ -2,7 +2,7 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -lm
+CFLAGS = -Wall -Wextra -std=c99
 TARGET = function_basics_demo
 SOURCE = function_basics_demo.c
 
@@ -11,7 +11,7 @@ all: $(TARGET)
 
 # Build the executable
 $(TARGET): $(SOURCE)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE) -lm
 
 # Run the program
 run: $(TARGET)
