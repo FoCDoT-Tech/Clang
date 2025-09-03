@@ -132,6 +132,23 @@ jobs:
         cd "../13.5_Signal_Handling" && make all && make clean
         cd "../13.6_Multi-file_Programs" && make all && make clean
     
+    - name: Build Chapter 14 - Standard Library
+      run: |
+        echo "🔨 Building Chapter 14 - Standard Library"
+        cd "14_Standard_Library/14.1_Standard_IO" && make all && make clean
+        cd "../14.2_String_Handling" && make all && make clean
+        cd "../14.3_Math_Library" && make all && make clean
+        cd "../14.4_Memory_Management" && make all && make clean
+        cd "../14.5_Character_Classification" && make all && make clean
+        cd "../14.6_Time_Functions" && make all && make clean
+    
+    - name: Build Chapter 15 - Debugging & Tools
+      run: |
+        echo "🔨 Building Chapter 15 - Debugging & Tools"
+        cd "15_Debugging_Tools/15.1_Debugging_Techniques" && make all && make clean
+        cd "../15.2_Common_Errors" && make all && make clean
+        cd "../15.3_Development_Tools" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -162,7 +179,9 @@ jobs:
         echo "  • Chapter 11: File Handling (4 sections)"
         echo "  • Chapter 12: Preprocessor (4 sections)"
         echo "  • Chapter 13: Advanced Topics (6 sections)"
+        echo "  • Chapter 14: Standard Library (6 sections)"
+        echo "  • Chapter 15: Debugging & Tools (3 sections)"
         echo ""
-        echo "🔧 Total examples: 55 working C programs"
+        echo "🔧 Total examples: 64 working C programs"
         echo "🛠️  All examples compile with: gcc -Wall -Wextra -std=c99 -pedantic"
         echo "✅ All tests passed successfully!"
