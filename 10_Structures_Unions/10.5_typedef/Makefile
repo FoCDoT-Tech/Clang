@@ -2,7 +2,8 @@
 
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c99 -pedantic -lm
+CFLAGS = -Wall -Wextra -std=c99 -pedantic
+LDFLAGS = -lm
 TARGET = typedef_demo
 SOURCE = typedef_demo.c
 
@@ -11,7 +12,7 @@ all: $(TARGET)
 
 # Build the executable
 $(TARGET): $(SOURCE)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCE) $(LDFLAGS)
 
 # Run the program
 run: $(TARGET)
