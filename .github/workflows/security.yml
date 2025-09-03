@@ -1,0 +1,67 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM UTC
+
+jobs:
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v2
+        with:
+          languages: cpp
+          queries: security-and-quality
+
+      - name: Build for CodeQL
+        run: |
+          # Build a subset of programs for security analysis
+          chapters=("01_Fundamentals" "08_Pointers" "09_Memory_Management" "11_File_Handling")
+          
+          for chapter in "${chapters[@]}"; do
+            if [ -d "$chapter" ]; then
+              echo "Building $chapter for security analysis..."
+              cd "$chapter"
+              find . -name "Makefile" -path "*/[0-9]*.*_*/*" | head -2 | while read makefile; do
+                section_dir=$(dirname "$makefile")
+                cd "$section_dir"
+                make build || echo "Build failed for $section_dir"
+                cd - > /dev/null
+              done
+              cd ..
+            fi
+          done
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+      - name: Check for hardcoded secrets
+        run: |
+          echo "🔍 Scanning for potential secrets..."
+          # Simple regex patterns for common secrets
+          if grep -r -i "password\|secret\|key\|token" --include="*.c" --include="*.h" . | grep -v "// Example\|/\*\|printf\|scanf"; then
+            echo "⚠️ Potential hardcoded secrets found"
+          else
+            echo "✅ No hardcoded secrets detected"
+          fi
+
+      - name: Buffer overflow detection
+        run: |
+          echo "🔍 Checking for potential buffer overflow patterns..."
+          if grep -r "gets\|strcpy\|strcat\|sprintf" --include="*.c" . | grep -v "// Unsafe\|/\* Unsafe\|snprintf\|strncpy\|strncat"; then
+            echo "⚠️ Potentially unsafe functions found - review for buffer overflow risks"
+          else
+            echo "✅ No obvious unsafe function usage detected"
+          fi

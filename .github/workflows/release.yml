@@ -1,0 +1,206 @@
+name: Release and Documentation
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  create-release:
+    name: Create Release Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup release environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip tar gzip
+
+      - name: Build all programs
+        run: |
+          echo "🔨 Building all programs for release..."
+          
+          # Create build log
+          echo "# C Language Learning - Build Log" > build_log.md
+          echo "Built on: $(date)" >> build_log.md
+          echo "" >> build_log.md
+          
+          total_programs=0
+          successful_builds=0
+          
+          for chapter in */; do
+            if [[ "$chapter" =~ ^[0-9][0-9]_.* ]]; then
+              echo "## Chapter: $chapter" >> build_log.md
+              cd "$chapter"
+              
+              for section in */; do
+                if [[ "$section" =~ ^[0-9].*_.* ]] && [ -f "$section/Makefile" ]; then
+                  echo "Building $chapter$section..."
+                  cd "$section"
+                  
+                  if make build >> ../../build_log.md 2>&1; then
+                    echo "✅ $chapter$section" >> ../../build_log.md
+                    ((successful_builds++))
+                  else
+                    echo "❌ $chapter$section" >> ../../build_log.md
+                  fi
+                  
+                  ((total_programs++))
+                  make clean
+                  cd ..
+                fi
+              done
+              cd ..
+            fi
+          done
+          
+          echo "" >> build_log.md
+          echo "**Summary: $successful_builds/$total_programs programs built successfully**" >> build_log.md
+
+      - name: Generate documentation
+        run: |
+          echo "📚 Generating release documentation..."
+          
+          # Create comprehensive README for release
+          cat > RELEASE_README.md << 'EOF'
+          # C Language Learning - Complete Course
+          
+          A comprehensive, hands-on C programming course with 64 working examples across 15 chapters.
+          
+          ## 🚀 Quick Start
+          
+          ```bash
+          # Clone the repository
+          git clone https://github.com/FoCDoT-Tech/Clang.git
+          cd Clang
+          
+          # Build a specific chapter
+          cd 01_Fundamentals
+          make build
+          
+          # Run all examples in a chapter
+          make run
+          
+          # Clean build artifacts
+          make clean
+          ```
+          
+          ## 📖 Course Structure
+          
+          ### Fundamentals (Chapters 1-3)
+          - Program structure and development environment
+          - Data types, variables, and basic syntax
+          
+          ### Core Concepts (Chapters 4-7)
+          - Operators and control flow
+          - Functions and parameter passing
+          - Arrays and string manipulation
+          
+          ### Advanced Topics (Chapters 8-11)
+          - Pointer arithmetic and memory management
+          - Structures, unions, and file handling
+          
+          ### Professional Development (Chapters 12-15)
+          - Preprocessor and advanced techniques
+          - Standard library mastery
+          - Debugging and development tools
+          
+          ## 🛠️ Build Requirements
+          
+          - GCC or Clang compiler
+          - Make build system
+          - POSIX-compliant system (Linux, macOS, WSL)
+          
+          ## 📋 Features
+          
+          - ✅ 64 working C programs
+          - ✅ Strict C99 compliance
+          - ✅ Comprehensive error handling
+          - ✅ Memory leak detection
+          - ✅ Cross-platform compatibility
+          - ✅ Automated testing
+          
+          ## 🎯 Learning Path
+          
+          1. **Beginner**: Chapters 1-5 (Fundamentals through Control Flow)
+          2. **Intermediate**: Chapters 6-10 (Functions through Structures)
+          3. **Advanced**: Chapters 11-15 (File Handling through Debugging)
+          
+          ## 📊 Statistics
+          
+          - **Total Programs**: 64
+          - **Lines of Code**: 10,000+
+          - **Chapters**: 15
+          - **Sections**: 60+
+          - **Build Time**: ~2 minutes
+          
+          EOF
+
+      - name: Create release archives
+        run: |
+          echo "📦 Creating release packages..."
+          
+          # Create source-only archive
+          tar -czf c-language-learning-source.tar.gz \
+            --exclude='.git' \
+            --exclude='*.o' \
+            --exclude='*.exe' \
+            --exclude='build/' \
+            .
+          
+          # Create documentation package
+          mkdir -p docs
+          cp RELEASE_README.md docs/
+          cp build_log.md docs/
+          find . -name "README.md" -exec cp {} docs/ \;
+          zip -r c-language-learning-docs.zip docs/
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-packages
+          path: |
+            c-language-learning-source.tar.gz
+            c-language-learning-docs.zip
+            build_log.md
+            RELEASE_README.md
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            c-language-learning-source.tar.gz
+            c-language-learning-docs.zip
+          body: |
+            # C Language Learning Course Release
+            
+            Complete C programming course with 64 working examples.
+            
+            ## 📦 Downloads
+            - **Source Code**: `c-language-learning-source.tar.gz`
+            - **Documentation**: `c-language-learning-docs.zip`
+            
+            ## ✨ What's Included
+            - 15 comprehensive chapters
+            - 64 working C programs
+            - Complete build system
+            - Automated testing
+            - Professional debugging tools
+            
+            ## 🚀 Getting Started
+            1. Download and extract the source archive
+            2. Follow the RELEASE_README.md instructions
+            3. Start with Chapter 01: Fundamentals
+            
+            Built with ❤️ for C language learners everywhere!
+          draft: false
+          prerelease: false

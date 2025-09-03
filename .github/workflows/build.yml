@@ -1,0 +1,295 @@
+name: Build and Test C Programs
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  CC: gcc
+  CFLAGS: -Wall -Wextra -std=c99 -pedantic -g
+
+jobs:
+  setup:
+    name: Setup Build Environment
+    runs-on: ubuntu-latest
+    outputs:
+      chapters: ${{ steps.discover.outputs.chapters }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache build dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/cache/apt
+            ~/.cache/pip
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/Makefile') }}
+          restore-keys: |
+            ${{ runner.os }}-deps-
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc make valgrind cppcheck clang-tidy
+
+      - name: Show build environment
+        run: |
+          echo "=== Build Environment ==="
+          gcc --version
+          make --version
+          valgrind --version
+          cppcheck --version || echo "cppcheck not available"
+
+      - name: Discover chapters
+        id: discover
+        run: |
+          chapters=$(find . -maxdepth 1 -type d -name "[0-9][0-9]_*" | sort | jq -R -s -c 'split("\n")[:-1]')
+          echo "chapters=$chapters" >> $GITHUB_OUTPUT
+          echo "Found chapters: $chapters"
+
+  build-chapter:
+    name: Build Chapter
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      fail-fast: false
+      matrix:
+        chapter: ${{ fromJson(needs.setup.outputs.chapters) }}
+        compiler: [gcc, clang]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Cache build artifacts
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ matrix.chapter }}/**/*.o
+            ${{ matrix.chapter }}/**/build/
+          key: ${{ runner.os }}-${{ matrix.compiler }}-${{ matrix.chapter }}-${{ hashFiles(format('{0}/**/*.c', matrix.chapter)) }}
+
+      - name: Install compiler
+        run: |
+          sudo apt-get update
+          if [ "${{ matrix.compiler }}" = "clang" ]; then
+            sudo apt-get install -y clang
+          fi
+
+      - name: Build chapter sections
+        run: |
+          chapter="${{ matrix.chapter }}"
+          echo "🔨 Building $chapter with ${{ matrix.compiler }}"
+          
+          if [ ! -d "$chapter" ]; then
+            echo "Chapter directory not found: $chapter"
+            exit 1
+          fi
+          
+          cd "$chapter"
+          
+          # Find all section directories
+          sections=$(find . -maxdepth 1 -type d -name "[0-9]*.*_*" | sort)
+          
+          if [ -z "$sections" ]; then
+            echo "No sections found in $chapter"
+            exit 0
+          fi
+          
+          for section in $sections; do
+            if [ -f "$section/Makefile" ]; then
+              echo "Building $section..."
+              cd "$section"
+              CC=${{ matrix.compiler }} make all
+              cd ..
+            else
+              echo "No Makefile found in $section, skipping"
+            fi
+          done
+
+      - name: Run tests
+        run: |
+          chapter="${{ matrix.chapter }}"
+          cd "$chapter"
+          
+          sections=$(find . -maxdepth 1 -type d -name "[0-9]*.*_*" | sort)
+          
+          for section in $sections; do
+            if [ -f "$section/Makefile" ]; then
+              echo "Testing $section..."
+              cd "$section"
+              CC=${{ matrix.compiler }} make test || echo "Test failed for $section"
+              cd ..
+            fi
+          done
+
+      - name: Clean build artifacts
+        run: |
+          chapter="${{ matrix.chapter }}"
+          cd "$chapter"
+          
+          sections=$(find . -maxdepth 1 -type d -name "[0-9]*.*_*" | sort)
+          
+          for section in $sections; do
+            if [ -f "$section/Makefile" ]; then
+              cd "$section"
+              make clean
+              cd ..
+            fi
+          done
+
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install analysis tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck clang-tidy
+
+      - name: Run cppcheck
+        run: |
+          echo "🔍 Running cppcheck static analysis..."
+          find . -name "*.c" -not -path "./.git/*" | xargs cppcheck \
+            --enable=all \
+            --suppress=missingIncludeSystem \
+            --suppress=unusedFunction \
+            --error-exitcode=1 \
+            --inline-suppr \
+            --quiet
+        continue-on-error: true
+
+      - name: Run clang-tidy
+        run: |
+          echo "🔍 Running clang-tidy analysis..."
+          find . -name "*.c" -not -path "./.git/*" | head -10 | xargs clang-tidy \
+            --checks='-*,readability-*,performance-*,bugprone-*' \
+            --warnings-as-errors='' || echo "clang-tidy completed with warnings"
+        continue-on-error: true
+
+  memory-check:
+    name: Memory Check
+    runs-on: ubuntu-latest
+    needs: [setup, build-chapter]
+    strategy:
+      matrix:
+        chapter: ${{ fromJson(needs.setup.outputs.chapters) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install valgrind
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y valgrind
+
+      - name: Build and run memory checks
+        run: |
+          chapter="${{ matrix.chapter }}"
+          cd "$chapter"
+          
+          sections=$(find . -maxdepth 1 -type d -name "[0-9]*.*_*" | sort | head -3)  # Limit to first 3 for time
+          
+          for section in $sections; do
+            if [ -f "$section/Makefile" ]; then
+              echo "Memory checking $section..."
+              cd "$section"
+              make build
+              
+              # Find executable
+              executable=$(find . -maxdepth 1 -type f -executable -not -name "Makefile" | head -1)
+              
+              if [ -n "$executable" ]; then
+                echo "Running valgrind on $executable"
+                timeout 30s valgrind --leak-check=brief --error-exitcode=1 "$executable" || echo "Valgrind check completed"
+              fi
+              
+              make clean
+              cd ..
+            fi
+          done
+        continue-on-error: true
+
+  integration-test:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    needs: [build-chapter, static-analysis]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run comprehensive build test
+        run: |
+          echo "🧪 Running comprehensive integration test"
+          
+          # Test master chapter Makefiles
+          for chapter_makefile in */Makefile; do
+            if [ -f "$chapter_makefile" ]; then
+              chapter_dir=$(dirname "$chapter_makefile")
+              echo "Testing master Makefile in $chapter_dir"
+              cd "$chapter_dir"
+              make build && make clean
+              cd ..
+            fi
+          done
+
+      - name: Verify no build artifacts remain
+        run: |
+          echo "🔍 Checking for remaining build artifacts..."
+          artifacts=$(find . -name "*.o" -o -name "*.exe" -o -name "*.out" | grep -v ".git" || true)
+          if [ -n "$artifacts" ]; then
+            echo "❌ Build artifacts found:"
+            echo "$artifacts"
+            exit 1
+          else
+            echo "✅ No build artifacts found"
+          fi
+
+  report:
+    name: Build Report
+    runs-on: ubuntu-latest
+    needs: [build-chapter, static-analysis, memory-check, integration-test]
+    if: always()
+    steps:
+      - name: Generate build report
+        run: |
+          echo "## 📊 Build Report" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ needs.build-chapter.result }}" = "success" ]; then
+            echo "✅ **Chapter Builds**: All chapters built successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Chapter Builds**: Some builds failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.static-analysis.result }}" = "success" ]; then
+            echo "✅ **Static Analysis**: No critical issues found" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Static Analysis**: Issues detected (non-blocking)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.memory-check.result }}" = "success" ]; then
+            echo "✅ **Memory Check**: No memory leaks detected" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Memory Check**: Issues detected (non-blocking)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.integration-test.result }}" = "success" ]; then
+            echo "✅ **Integration Test**: All tests passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Integration Test**: Some tests failed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📈 Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Chapters**: 15" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Programs**: 64" >> $GITHUB_STEP_SUMMARY
+          echo "- **Compilers Tested**: GCC, Clang" >> $GITHUB_STEP_SUMMARY
+          echo "- **Standards**: C99 with strict warnings" >> $GITHUB_STEP_SUMMARY

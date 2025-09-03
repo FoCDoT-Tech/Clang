@@ -1,0 +1,205 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  code-formatting:
+    name: Code Formatting Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Check code formatting
+        run: |
+          echo "🎨 Checking code formatting..."
+          
+          # Find all C files and check formatting
+          find . -name "*.c" -o -name "*.h" | grep -v ".git" | while read file; do
+            if ! clang-format --dry-run --Werror "$file" 2>/dev/null; then
+              echo "❌ Formatting issues in: $file"
+              echo "Run: clang-format -i $file"
+            fi
+          done
+
+  documentation-check:
+    name: Documentation Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check README completeness
+        run: |
+          echo "📚 Checking documentation quality..."
+          
+          missing_readmes=0
+          
+          # Check each chapter has README
+          for chapter in */; do
+            if [[ "$chapter" =~ ^[0-9][0-9]_.* ]]; then
+              if [ ! -f "$chapter/README.md" ]; then
+                echo "❌ Missing README.md in $chapter"
+                ((missing_readmes++))
+              fi
+              
+              # Check each section has README
+              cd "$chapter"
+              for section in */; do
+                if [[ "$section" =~ ^[0-9].*_.* ]] && [ ! -f "$section/README.md" ]; then
+                  echo "❌ Missing README.md in $chapter$section"
+                  ((missing_readmes++))
+                fi
+              done
+              cd ..
+            fi
+          done
+          
+          if [ $missing_readmes -eq 0 ]; then
+            echo "✅ All documentation present"
+          else
+            echo "❌ Found $missing_readmes missing README files"
+            exit 1
+          fi
+
+      - name: Check Makefile completeness
+        run: |
+          echo "🔧 Checking Makefile quality..."
+          
+          missing_makefiles=0
+          
+          for chapter in */; do
+            if [[ "$chapter" =~ ^[0-9][0-9]_.* ]]; then
+              cd "$chapter"
+              for section in */; do
+                if [[ "$section" =~ ^[0-9].*_.* ]]; then
+                  if [ ! -f "$section/Makefile" ]; then
+                    echo "❌ Missing Makefile in $chapter$section"
+                    ((missing_makefiles++))
+                  else
+                    # Check Makefile has required targets
+                    cd "$section"
+                    if ! grep -q "^build:" Makefile || ! grep -q "^clean:" Makefile; then
+                      echo "❌ Incomplete Makefile in $chapter$section (missing build/clean targets)"
+                      ((missing_makefiles++))
+                    fi
+                    cd ..
+                  fi
+                fi
+              done
+              cd ..
+            fi
+          done
+          
+          if [ $missing_makefiles -eq 0 ]; then
+            echo "✅ All Makefiles present and complete"
+          else
+            echo "❌ Found $missing_makefiles Makefile issues"
+            exit 1
+          fi
+
+  performance-check:
+    name: Performance Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install performance tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y time
+
+      - name: Build time analysis
+        run: |
+          echo "⏱️ Analyzing build performance..."
+          
+          total_time=0
+          chapter_count=0
+          
+          for chapter in */; do
+            if [[ "$chapter" =~ ^[0-9][0-9]_.* ]]; then
+              echo "Timing $chapter..."
+              cd "$chapter"
+              
+              start_time=$(date +%s.%N)
+              make build >/dev/null 2>&1 || echo "Build failed for $chapter"
+              end_time=$(date +%s.%N)
+              
+              chapter_time=$(echo "$end_time - $start_time" | bc -l)
+              total_time=$(echo "$total_time + $chapter_time" | bc -l)
+              ((chapter_count++))
+              
+              printf "  Time: %.2fs\n" "$chapter_time"
+              
+              make clean >/dev/null 2>&1
+              cd ..
+            fi
+          done
+          
+          avg_time=$(echo "scale=2; $total_time / $chapter_count" | bc -l)
+          printf "\n📊 Performance Summary:\n"
+          printf "Total build time: %.2fs\n" "$total_time"
+          printf "Average per chapter: %.2fs\n" "$avg_time"
+          printf "Chapters built: %d\n" "$chapter_count"
+
+  compatibility-check:
+    name: Compiler Compatibility
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        compiler: [gcc-9, gcc-10, gcc-11, clang-12, clang-13]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install compiler
+        run: |
+          sudo apt-get update
+          case "${{ matrix.compiler }}" in
+            gcc-*)
+              version=${compiler#gcc-}
+              sudo apt-get install -y gcc-$version
+              sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-$version 100
+              ;;
+            clang-*)
+              version=${compiler#clang-}
+              sudo apt-get install -y clang-$version
+              sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-$version 100
+              ;;
+          esac
+
+      - name: Test compilation compatibility
+        run: |
+          echo "🔧 Testing ${{ matrix.compiler }} compatibility..."
+          
+          # Test a subset of programs for compatibility
+          test_chapters=("01_Fundamentals" "06_Functions" "08_Pointers")
+          
+          for chapter in "${test_chapters[@]}"; do
+            if [ -d "$chapter" ]; then
+              cd "$chapter"
+              section=$(find . -maxdepth 1 -type d -name "[0-9]*.*_*" | head -1)
+              if [ -n "$section" ] && [ -f "$section/Makefile" ]; then
+                cd "$section"
+                if [[ "${{ matrix.compiler }}" == gcc-* ]]; then
+                  CC=gcc make build
+                else
+                  CC=clang make build
+                fi
+                make clean
+                cd ..
+              fi
+              cd ..
+            fi
+          done
+          
+          echo "✅ ${{ matrix.compiler }} compatibility verified"
