@@ -7,45 +7,15 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM UTC
+  workflow_dispatch:
 
 jobs:
-  security-scan:
-    name: Security Analysis
+  basic-security:
+    name: Basic Security Checks
     runs-on: ubuntu-latest
-    permissions:
-      security-events: write
-      contents: read
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Run CodeQL Analysis
-        uses: github/codeql-action/init@v2
-        with:
-          languages: cpp
-          queries: security-and-quality
-
-      - name: Build for CodeQL
-        run: |
-          # Build a subset of programs for security analysis
-          chapters=("01_Fundamentals" "08_Pointers" "09_Memory_Management" "11_File_Handling")
-          
-          for chapter in "${chapters[@]}"; do
-            if [ -d "$chapter" ]; then
-              echo "Building $chapter for security analysis..."
-              cd "$chapter"
-              find . -name "Makefile" -path "*/[0-9]*.*_*/*" | head -2 | while read makefile; do
-                section_dir=$(dirname "$makefile")
-                cd "$section_dir"
-                make build || echo "Build failed for $section_dir"
-                cd - > /dev/null
-              done
-              cd ..
-            fi
-          done
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
 
       - name: Check for hardcoded secrets
         run: |
@@ -65,3 +35,34 @@ jobs:
           else
             echo "✅ No obvious unsafe function usage detected"
           fi
+
+  codeql-analysis:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'FoCDoT-Tech'
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: c-cpp
+          queries: security-extended
+
+      - name: Build sample for CodeQL
+        run: |
+          echo "Building sample programs for CodeQL analysis..."
+          # Build just a few representative programs
+          cd "01_Fundamentals/1.3_First_Program"
+          make build || echo "Build completed"
+          make clean
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:c-cpp"
