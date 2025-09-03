@@ -122,6 +122,16 @@ jobs:
         cd "../12.3_Conditional_Compilation" && make all && make clean
         cd "../12.4_Predefined_Macros" && make all && make clean
     
+    - name: Build Chapter 13 - Advanced Topics
+      run: |
+        echo "🔨 Building Chapter 13 - Advanced Topics"
+        cd "13_Advanced_Topics/13.1_Complex_Data_Structures" && make all && make clean
+        cd "../13.2_Advanced_Pointer_Techniques" && make all && make clean
+        cd "../13.3_Bit_Manipulation" && make all && make clean
+        cd "../13.4_Variable_Arguments" && make all && make clean
+        cd "../13.5_Signal_Handling" && make all && make clean
+        cd "../13.6_Multi-file_Programs" && make all && make clean
+    
     - name: Run comprehensive test
       run: |
         echo "🧪 Running comprehensive test of all examples"
@@ -141,7 +151,7 @@ jobs:
         echo "📁 Chapters built and tested:"
         echo "  • Chapter 01: Fundamentals (3 sections)"
         echo "  • Chapter 02: Basic Syntax & Structure (3 sections)"
-        echo "  • Chapter 03: Data Types & Variables (4 sections)"
+        echo "  • Chapter 03: Data Types & Variables (5 sections)"
         echo "  • Chapter 04: Operators (7 sections)"
         echo "  • Chapter 05: Control Flow (3 sections)"
         echo "  • Chapter 06: Functions (4 sections)"
@@ -151,7 +161,8 @@ jobs:
         echo "  • Chapter 10: Structures & Unions (5 sections)"
         echo "  • Chapter 11: File Handling (4 sections)"
         echo "  • Chapter 12: Preprocessor (4 sections)"
+        echo "  • Chapter 13: Advanced Topics (6 sections)"
         echo ""
-        echo "🔧 Total examples: 49 working C programs"
+        echo "🔧 Total examples: 55 working C programs"
         echo "🛠️  All examples compile with: gcc -Wall -Wextra -std=c99 -pedantic"
         echo "✅ All tests passed successfully!"
