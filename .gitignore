@@ -1,0 +1,36 @@
+# Compiled binaries and executables
+*_demo
+multifile_demo
+
+# Object files
+*.o
+*.obj
+
+# Debug symbols
+*.dSYM/
+*.pdb
+
+# Dependency files
+*.d
+
+# Log files
+*.log
+
+# Build directories
+bin/
+obj/
+lib/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
